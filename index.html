@@ -2,235 +2,120 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vida Ativa - Controle Pessoal</title>
+  <title>Informações Nutricionais</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
     }
-
-    header {
-      background-color: #2c2c2c;
-      padding: 1rem 2rem;
+    h1 {
       text-align: center;
-      font-size: 1.5rem;
-      color: #8ef29b;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     }
-
-    nav {
+    .categorias {
       display: flex;
       justify-content: center;
-      gap: 2rem;
-      background-color: #2c2c2c;
-      padding: 1rem;
+      margin-bottom: 20px;
     }
-
-    nav button {
-      background: none;
-      border: none;
-      color: #e0e0e0;
-      font-size: 1rem;
+    .categorias button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 16px;
       cursor: pointer;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
     }
-
-    nav button:hover {
-      background-color: #8ef29b33;
-      color: #8ef29b;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
     }
-
-    main {
-      padding: 2rem;
-    }
-
     .card {
-      background-color: #2c2c2c;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .card h2 {
-      color: #8ef29b;
-      margin-bottom: 1rem;
-    }
-
-    label, input, select {
-      display: block;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-
-    input[type="number"], input[type="text"], select {
-      padding: 0.5rem;
-      border: none;
+      background: white;
       border-radius: 8px;
-      background-color: #3a3a3a;
-      color: #fff;
-    }
-
-    button.calcular {
-      background-color: #8ef29b;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 10px;
+      text-align: center;
       cursor: pointer;
-      font-weight: bold;
-      color: #1e1e1e;
+      transition: transform 0.2s;
     }
-
-    .resultado {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-      color: #fff;
+    .card:hover {
+      transform: scale(1.05);
     }
-
-    img.alimento-foto {
-      width: 100px;
-      height: auto;
-      margin-top: 1rem;
-      border-radius: 8px;
+    .card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 5px;
     }
-
-    .receitas {
-      margin-top: 1.5rem;
-      background-color: #383838;
-      padding: 1rem;
+    #info-nutricional {
+      margin-top: 30px;
+      background: #fff;
+      padding: 20px;
       border-radius: 10px;
-    }
-
-    .receitas h3 {
-      color: #8ef29b;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <header>Vida Ativa - Controle de Alimentação e Atividades</header>
+  <h1>Consulta Nutricional por Categoria</h1>
 
-  <nav>
-    <button onclick="mostrarSecao('alimentacao')">Alimentação</button>
-    <button onclick="mostrarSecao('calorias')">Calorias e Déficit</button>
-    <button onclick="mostrarSecao('atividades')">Atividades</button>
-    <button onclick="mostrarSecao('resumo')">Resumo Diário</button>
-  </nav>
+  <div class="categorias">
+    <button onclick="mostrarAlimentos('Carnes')">Carnes</button>
+    <button onclick="mostrarAlimentos('Frutas')">Frutas</button>
+  </div>
 
-  <main>
-    <section id="alimentacao" class="card">
-      <h2>Controle de Alimentação</h2>
-      <label for="alimento">Alimento:</label>
-      <input type="text" id="alimento" placeholder="Ex: Banana">
+  <div id="alimentos" class="grid"></div>
 
-      <label for="peso">Peso (g):</label>
-      <input type="number" id="peso" placeholder="Ex: 100">
-
-      <button class="calcular" onclick="calcularCaloriasAPI()">Calcular Calorias</button>
-
-      <div class="resultado" id="resultadoAlimentacao"></div>
-      <img id="fotoAlimento" class="alimento-foto" src="" alt="">
-
-      <div class="receitas" id="receitas"></div>
-    </section>
-
-    <section id="calorias" class="card" style="display: none;">
-      <h2>Déficit Calórico e Tipo de Atividade</h2>
-      <label for="gasto">Calorias Gastas no Dia:</label>
-      <input type="number" id="gasto" placeholder="Ex: 2000">
-
-      <label for="atividade">Tipo de Atividade:</label>
-      <select id="atividade">
-        <option value="corrida">Corrida</option>
-        <option value="pedal">Pedal</option>
-        <option value="academia">Academia</option>
-        <option value="caminhada">Caminhada</option>
-        <option value="outra">Outra</option>
-      </select>
-
-      <div class="resultado" id="resultadoCalorias"></div>
-    </section>
-
-    <section id="atividades" class="card" style="display: none;">
-      <h2>Monitoramento de Atividades</h2>
-      <p>(em breve)</p>
-    </section>
-
-    <section id="resumo" class="card" style="display: none;">
-      <h2>Resumo Diário</h2>
-      <p>(em breve)</p>
-    </section>
-  </main>
+  <div id="info-nutricional"></div>
 
   <script>
-    function mostrarSecao(id) {
-      document.querySelectorAll('main section').forEach(sec => {
-        sec.style.display = 'none';
+    const alimentos = {
+      'Carnes': [
+        { nome: 'Frango grelhado', imagem: 'https://i.imgur.com/Ee1KyzO.jpg' },
+        { nome: 'Carne moida', imagem: 'https://i.imgur.com/tGJNKkD.jpg' },
+        { nome: 'Peixe assado', imagem: 'https://i.imgur.com/p0MRNwp.jpg' }
+      ],
+      'Frutas': [
+        { nome: 'Banana', imagem: 'https://i.imgur.com/WrzIuGo.jpg' },
+        { nome: 'Maçã', imagem: 'https://i.imgur.com/YfPMbNW.jpg' },
+        { nome: 'Abacate', imagem: 'https://i.imgur.com/EMlVptx.jpg' }
+      ]
+    };
+
+    function mostrarAlimentos(categoria) {
+      const container = document.getElementById('alimentos');
+      container.innerHTML = '';
+      alimentos[categoria].forEach(alimento => {
+        container.innerHTML += `
+          <div class="card" onclick="buscarDados('${alimento.nome}')">
+            <img src="${alimento.imagem}" alt="${alimento.nome}" />
+            <p>${alimento.nome}</p>
+          </div>
+        `;
       });
-      document.getElementById(id).style.display = 'block';
     }
 
-    async function calcularCaloriasAPI() {
-      const alimento = document.getElementById('alimento').value;
-      const peso = parseFloat(document.getElementById('peso').value);
-      const resultado = document.getElementById('resultadoAlimentacao');
-      const foto = document.getElementById('fotoAlimento');
-      const receitasDiv = document.getElementById('receitas');
-
-      if (!alimento || !peso || peso <= 0) {
-        resultado.textContent = "Preencha corretamente o alimento e o peso.";
-        return;
-      }
-
-      const apiKey = 'HGalesHZL9FwYPr9T0vdLbrDqSftoKk1L3d0nXle';
-      const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(alimento)}&pageSize=1&api_key=${apiKey}`;
+    async function buscarDados(nomeAlimento) {
+      const appId = 'HGalesHZL9FwYPr9T0vdLbrDqSftoKk1L3d0nXle'; // substitua pelo seu App ID
+      const appKey = 'HGalesHZL9FwYPr9T0vdLbrDqSftoKk1L3d0nXle'; // substitua pela sua chave
+      const url = `https://api.edamam.com/api/nutrition-data?app_id=${appId}&app_key=${appKey}&ingr=100g%20${encodeURIComponent(nomeAlimento)}`;
 
       try {
-        const res = await fetch(url);
-        const data = await res.json();
-        if (!data.foods || data.foods.length === 0) {
-          resultado.textContent = "Alimento não encontrado na base USDA.";
-          return;
-        }
+        const resposta = await fetch(url);
+        const dados = await resposta.json();
 
-        const food = data.foods[0];
-        const nutrientes = {};
-        for (const n of food.foodNutrients) {
-          if (n.nutrientName === "Energy") nutrientes.calorias = n.value;
-          if (n.nutrientName === "Protein") nutrientes.proteina = n.value;
-          if (n.nutrientName === "Carbohydrate, by difference") nutrientes.carbo = n.value;
-          if (n.nutrientName === "Total lipid (fat)") nutrientes.gordura = n.value;
-        }
-
-        const mult = peso / 100;
-        resultado.innerHTML = `
-          <strong>${food.description}</strong><br>
-          Calorias: ${(nutrientes.calorias * mult).toFixed(2)} kcal<br>
-          Proteína: ${(nutrientes.proteina * mult).toFixed(2)} g<br>
-          Carboidratos: ${(nutrientes.carbo * mult).toFixed(2)} g<br>
-          Gorduras: ${(nutrientes.gordura * mult).toFixed(2)} g
+        document.getElementById('info-nutricional').innerHTML = `
+          <h2>${nomeAlimento}</h2>
+          <p><strong>Calorias:</strong> ${dados.calories}</p>
+          <p><strong>Proteínas:</strong> ${dados.totalNutrients.PROCNT?.quantity?.toFixed(1) || 0} g</p>
+          <p><strong>Gorduras:</strong> ${dados.totalNutrients.FAT?.quantity?.toFixed(1) || 0} g</p>
+          <p><strong>Carboidratos:</strong> ${dados.totalNutrients.CHOCDF?.quantity?.toFixed(1) || 0} g</p>
+          <p><strong>Fibras:</strong> ${dados.totalNutrients.FIBTG?.quantity?.toFixed(1) || 0} g</p>
         `;
-
-        // Tentativa de imagem (usando nome do alimento no Google Images)
-        foto.src = `https://source.unsplash.com/160x160/?${alimento}`;
-        foto.alt = alimento;
-
-        receitasDiv.innerHTML = `
-          <h3>Ideias de receitas com ${alimento}</h3>
-          <ul>
-            <li>Salada com ${alimento}</li>
-            <li>Receita fitness de ${alimento}</li>
-            <li>Shake de ${alimento}</li>
-          </ul>
-        `;
-      } catch (error) {
-        console.error(error);
-        resultado.textContent = "Erro ao buscar dados do alimento.";
+      } catch (erro) {
+        alert('Erro ao buscar dados. Verifique se o nome do alimento está correto ou se a chave da API é válida.');
       }
     }
   </script>
 </body>
 </html>
+
